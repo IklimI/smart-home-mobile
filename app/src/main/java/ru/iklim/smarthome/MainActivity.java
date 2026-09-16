@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.*;
 import org.json.*;
 import java.net.*;
@@ -27,7 +26,6 @@ public class MainActivity extends Activity {
     private int dp(int n) { return (int)(n * getResources().getDisplayMetrics().density); }
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         prefs = getSharedPreferences("settings", 0);
         home();
     }
