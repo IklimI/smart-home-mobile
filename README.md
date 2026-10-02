@@ -41,6 +41,12 @@ JDK 17, Gradle 8.11.1, Android SDK 35, Build Tools 35.0.0, AGP 8.9.2.
 gradle :app:lintDebug :app:assembleDebug
 ```
 
+Встроенный адрес сервера (удалённый доступ) задаётся при сборке и не хранится в репозитории:
+CI подставляет его из GitHub Secret `HA_DEFAULT_URL` (Settings → Secrets and variables → Actions),
+локально — свойством `gradle -PHA_DEFAULT_URL=http://адрес:8123 :app:assembleDebug`.
+Если секрет пуст, приложение ведёт себя как раньше и адрес вводится в настройках вручную.
+Встроенный адрес подставляется при первом запуске и остаётся изменяемым в настройках.
+
 Gradle Wrapper пока не включён; CI устанавливает фиксированную версию Gradle.
 APK: app/build/outputs/apk/debug/app-debug.apk.
 Минимальная версия телефона Android 8.0 (API 26).

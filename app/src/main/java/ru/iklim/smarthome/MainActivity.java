@@ -27,6 +27,8 @@ public class MainActivity extends Activity {
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
         prefs = getSharedPreferences("settings", 0);
+        if (prefs.getString("url", "").isEmpty() && !BuildConfig.HA_DEFAULT_URL.isEmpty())
+            prefs.edit().putString("url", BuildConfig.HA_DEFAULT_URL).apply();
         home();
     }
     private void layout(String title) {

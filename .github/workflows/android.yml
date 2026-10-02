@@ -27,6 +27,8 @@ jobs:
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Build and lint
         run: gradle --no-daemon :app:lintDebug :app:assembleDebug
+        env:
+          HA_DEFAULT_URL: ${{ secrets.HA_DEFAULT_URL }}
       - name: Name APK
         run: cp app/build/outputs/apk/debug/app-debug.apk SmartHomeMobile-debug.apk
       - uses: actions/upload-artifact@v4
