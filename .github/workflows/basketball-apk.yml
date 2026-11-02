@@ -18,6 +18,9 @@ jobs:
         run: |
           base64 -d basketball_v3_patch_base64.md | gzip -dc > /tmp/basketball_v3.patch
           (cd basketball_build && patch --batch -p1 < /tmp/basketball_v3.patch)
+          # Separate debug signing keys prevent in-place upgrades of v2; keep old app and its history intact.
+          sed -i "s/applicationId 'ru.family.basketshooterproto'/applicationId 'ru.family.basketshooterproto.v3'/" basketball_build/app/build.gradle
+          sed -i 's/Баскетбол: Папа и сын/Баскетбол Физика v3/' basketball_build/app/src/main/AndroidManifest.xml
           grep -n 'versionName' basketball_build/app/build.gradle
       - uses: actions/setup-java@v4
         with:
