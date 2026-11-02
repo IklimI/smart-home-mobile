@@ -1,0 +1,29 @@
+name: Build Basketball Wi-Fi APK
+on:
+  push:
+    branches: [basketball-build]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore standalone basketball project
+        run: base64 -d basketball_source_base64.md | tar -xz
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: basketball-wifi-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
