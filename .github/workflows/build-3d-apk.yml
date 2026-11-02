@@ -1,0 +1,30 @@
+name: Build 3D Basketball Physics APK
+on:
+  push:
+    branches: [basketball-arcade-3d]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore standalone 3D source
+        run: |
+          mkdir -p arcade3d
+          base64 -d basketball_arcade3d_source_base64.md | tar -xz -C arcade3d
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Build APK
+        run: gradle -p arcade3d :app:assembleDebug --no-daemon --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: basketball-arcade-3d-physics-apk
+          path: arcade3d/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
