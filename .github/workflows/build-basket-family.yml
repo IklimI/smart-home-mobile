@@ -1,0 +1,30 @@
+name: Build Basket Family 3D APK
+on:
+  push:
+    branches: [basketball-family-full]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore isolated Android project
+        run: |
+          mkdir -p basket_family_project
+          base64 -d basket_family_source_base64.txt | tar -xz -C basket_family_project
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+      - name: Build debug APK
+        run: gradle -p basket_family_project :app:assembleDebug --no-daemon --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BasketFamily3D-beta-apk
+          path: basket_family_project/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
